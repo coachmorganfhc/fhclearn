@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FHC Learn — Coach Education Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#1D9E75;--green-light:#E1F5EE;--green-mid:#0F6E56;--green-dark:#085041;
+  --text:#1a1a1a;--text-2:#555;--text-3:#888;
+  --bg:#f7f6f2;--bg-card:#ffffff;--bg-2:#f0efe9;
+  --border:rgba(0,0,0,0.08);--border-2:rgba(0,0,0,0.14);
+  --radius:10px;--radius-lg:14px;
+  --shadow:0 1px 3px rgba(0,0,0,0.06),0 4px 16px rgba(0,0,0,0.04);
+  --shadow-lg:0 4px 24px rgba(0,0,0,0.10);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.6}
+.screen{display:none;min-height:100vh}
+.screen.active{display:flex}
+
+/* LOGIN */
+#screen-login{align-items:center;justify-content:center;flex-direction:column;padding:2rem}
+.login-card{background:var(--bg-card);border-radius:var(--radius-lg);border:0.5px solid var(--border);box-shadow:var(--shadow-lg);padding:2.5rem 2rem;width:100%;max-width:400px}
+.login-logo{display:flex;align-items:center;gap:10px;margin-bottom:2rem}
+.login-logo-mark{width:40px;height:40px;background:var(--green);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.login-logo-mark i{color:white;font-size:20px}
+.login-logo-text{font-size:20px;font-weight:600;letter-spacing:-0.3px}
+.login-logo-sub{font-size:12px;color:var(--text-3);font-weight:400;margin-top:-2px}
+.login-label{font-size:12px;font-weight:500;color:var(--text-2);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px}
+.login-select{width:100%;padding:11px 14px;border:0.5px solid var(--border-2);border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-size:15px;background:var(--bg-card);color:var(--text);appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;cursor:pointer;margin-bottom:1rem}
+.login-select:focus{outline:none;border-color:var(--green)}
+.login-btn{width:100%;padding:12px;background:var(--green);color:white;border:none;border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background 0.15s}
+.login-btn:hover{background:var(--green-mid)}
+.login-btn:disabled{opacity:0.4;cursor:not-allowed}
+.login-divider{text-align:center;font-size:12px;color:var(--text-3);margin:1rem 0}
+.admin-link{width:100%;padding:10px;background:none;color:var(--text-2);border:0.5px solid var(--border-2);border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all 0.15s}
+.admin-link:hover{background:var(--bg-2);color:var(--text)}
+
+/* MODALS */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);display:none;align-items:center;justify-content:center;z-index:200;padding:1rem}
+.modal-overlay.open{display:flex}
+.modal{background:var(--bg-card);border-radius:var(--radius-lg);padding:2rem;width:100%;max-width:360px;box-shadow:var(--shadow-lg)}
+.modal h3{font-size:16px;font-weight:600;margin-bottom:6px}
+.modal p{font-size:13px;color:var(--text-2);margin-bottom:1.25rem}
+.modal input{width:100%;padding:11px 14px;border:0.5px solid var(--border-2);border-radius:var(--radius);font-family:'DM Mono',monospace;font-size:16px;letter-spacing:0.15em;text-align:center;margin-bottom:1rem;color:var(--text)}
+.modal input:focus{outline:none;border-color:var(--green)}
+.modal-err{font-size:13px;color:#c0392b;margin-bottom:8px;display:none}
+.modal-btns{display:flex;gap:8px}
+.modal-btns button{flex:1;padding:10px;border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;border:0.5px solid var(--border-2)}
+.modal-btns .btn-confirm{background:var(--green);color:white;border-color:var(--green)}
+.modal-btns .btn-cancel{background:none;color:var(--text-2)}
+.add-modal{background:var(--bg-card);border-radius:var(--radius-lg);padding:2rem;width:100%;max-width:380px;box-shadow:var(--shadow-lg)}
+.add-modal h3{font-size:16px;font-weight:600;margin-bottom:6px}
+.add-modal p{font-size:13px;color:var(--text-2);margin-bottom:1.25rem}
+.add-modal label{font-size:12px;font-weight:500;color:var(--text-2);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:6px}
+.add-modal input{width:100%;padding:10px 14px;border:0.5px solid var(--border-2);border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);margin-bottom:1rem;letter-spacing:normal;text-align:left}
+.add-modal input:focus{outline:none;border-color:var(--green)}
+
+/* PORTAL NAV */
+#screen-portal{flex-direction:column;align-items:stretch}
+.portal-nav{background:var(--bg-card);border-bottom:0.5px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:100}
+.nav-logo{display:flex;align-items:center;gap:8px;font-weight:600;font-size:16px;letter-spacing:-0.2px}
+.nav-logo-mark{width:28px;height:28px;background:var(--green);border-radius:7px;display:flex;align-items:center;justify-content:center}
+.nav-logo-mark i{color:white;font-size:14px}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-coach{font-size:13px;color:var(--text-2);display:flex;align-items:center;gap:6px}
+.nav-coach-dot{width:8px;height:8px;background:var(--green);border-radius:50%}
+.nav-logout{background:none;border:0.5px solid var(--border-2);padding:5px 12px;border-radius:8px;font-size:13px;cursor:pointer;color:var(--text-2);font-family:'DM Sans',sans-serif}
+.nav-logout:hover{background:var(--bg-2)}
+.portal-body{padding:2rem;max-width:1100px;margin:0 auto;width:100%}
+
+/* STATS */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.75rem}
+.stat{background:var(--bg-card);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px 16px}
+.stat-label{font-size:11px;font-weight:500;color:var(--text-3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px}
+.stat-value{font-size:26px;font-weight:600;letter-spacing:-0.5px}
+.stat-sub{font-size:12px;color:var(--text-3);margin-top:2px}
+.prog-wrap{background:var(--bg-card);border:0.5px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin-bottom:1.75rem;display:flex;align-items:center;gap:16px}
+.prog-label{font-size:13px;font-weight:500;white-space:nowrap}
+.prog-track{flex:1;height:6px;background:var(--bg-2);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:var(--green);border-radius:3px;transition:width 0.4s}
+.prog-pct{font-size:13px;font-weight:600;color:var(--green);min-width:38px;text-align:right}
+
+/* TABS */
+.pillar-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.5rem}
+.ptab{padding:7px 16px;font-size:13px;font-weight:500;border-radius:20px;border:0.5px solid var(--border-2);background:var(--bg-card);cursor:pointer;color:var(--text-2);display:flex;align-items:center;gap:6px;transition:all 0.15s}
+.ptab:hover{border-color:var(--green);color:var(--green)}
+.ptab.active{background:var(--green);border-color:var(--green);color:white}
+.ptab i{font-size:15px}
+.ptab .count{font-size:11px;opacity:0.7;font-family:'DM Mono',monospace}
+
+/* LESSON GRID */
+.lesson-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1rem 1.1rem;cursor:pointer;transition:all 0.15s;position:relative;overflow:hidden}
+.lesson-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:transparent;transition:background 0.15s}
+.lesson-card:hover{border-color:var(--border-2);box-shadow:var(--shadow);transform:translateY(-1px)}
+.lesson-card:hover::after{background:var(--green)}
+.lesson-card.done::after{background:var(--green)}
+.lc-done-badge{position:absolute;top:10px;right:10px;width:20px;height:20px;background:var(--green);border-radius:50%;display:none;align-items:center;justify-content:center}
+.lesson-card.done .lc-done-badge{display:flex}
+.lc-done-badge i{color:white;font-size:11px}
+.lc-type{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;padding:3px 8px;border-radius:6px;margin-bottom:10px}
+.tv{background:#B5D4F4;color:#0C447C}
+.ta{background:#C0DD97;color:#27500A}
+.tp{background:#FAC775;color:#412402}
+.tq{background:#F4C0D1;color:#4B1528}
+.lc-title{font-size:13px;font-weight:500;line-height:1.45;margin-bottom:8px;padding-right:18px}
+.lc-meta{font-size:11px;color:var(--text-3);margin-bottom:4px}
+.lc-level{font-size:11px;color:var(--text-3)}
+.lc-src{font-size:10px;font-weight:600;color:var(--green);margin-top:6px}
+
+/* VIEWER */
+.viewer{background:var(--bg-card);border:0.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;display:none;margin-bottom:1.75rem;box-shadow:var(--shadow)}
+.viewer.open{display:block}
+.viewer-head{display:flex;align-items:flex-start;justify-content:space-between;padding:16px 18px;border-bottom:0.5px solid var(--border);gap:12px}
+.viewer-title{font-size:15px;font-weight:600;flex:1;line-height:1.4}
+.viewer-close{background:none;border:0.5px solid var(--border-2);border-radius:8px;padding:6px 10px;cursor:pointer;color:var(--text-2);font-size:13px;display:flex;align-items:center;gap:4px;flex-shrink:0;font-family:'DM Sans',sans-serif}
+.viewer-close:hover{background:var(--bg-2)}
+.viewer-vid{position:relative;padding-bottom:52%;background:#085041}
+.viewer-vid iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+.viewer-novid{background:#085041;height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.viewer-novid i{font-size:32px;color:rgba(255,255,255,.3)}
+.viewer-novid p{font-size:13px;color:rgba(255,255,255,.65);text-align:center;max-width:240px;line-height:1.5}
+.viewer-src-badge{font-size:11px;font-weight:600;background:rgba(255,255,255,.15);color:rgba(255,255,255,.85);padding:4px 12px;border-radius:20px}
+.viewer-body{padding:18px}
+.src-tag{display:inline-block;font-size:11px;font-weight:600;color:var(--green);background:var(--green-light);padding:3px 10px;border-radius:12px;margin-bottom:12px}
+.vtext{font-size:14px;line-height:1.8;color:var(--text-2);margin-bottom:14px}
+.vtext strong{color:var(--text);font-weight:500}
+.kp-head{font-size:11px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:8px}
+.kp{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:0.5px solid var(--border);font-size:13px;line-height:1.55;color:var(--text-2)}
+.kp:last-child{border-bottom:none}
+.kp i{color:var(--green);font-size:14px;margin-top:2px;flex-shrink:0}
+.apply-box{background:var(--bg-2);border-left:3px solid var(--green);border-radius:0 var(--radius) var(--radius) 0;padding:12px 14px;margin:14px 0}
+.apply-box-head{font-size:11px;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px}
+.apply-box p{font-size:13px;line-height:1.65;color:var(--text)}
+.v-divider{border:none;border-top:0.5px solid var(--border);margin:14px 0}
+.vactions{display:flex;align-items:center;gap:8px;padding-top:14px;margin-top:6px}
+.btn-complete{background:var(--green);color:white;border:none;padding:9px 20px;border-radius:var(--radius);font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif}
+.btn-complete:hover{background:var(--green-mid)}
+.btn-close-v{background:none;color:var(--text-2);border:0.5px solid var(--border-2);padding:9px 16px;border-radius:var(--radius);font-size:14px;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif}
+.btn-close-v:hover{background:var(--bg-2)}
+.quiz-q{font-size:14px;font-weight:500;margin-bottom:12px;line-height:1.5}
+.qopt{padding:10px 14px;border:0.5px solid var(--border-2);border-radius:var(--radius);margin-bottom:8px;cursor:pointer;font-size:13px;line-height:1.5;color:var(--text-2);transition:all 0.15s}
+.qopt:hover{border-color:var(--green);background:var(--green-light);color:var(--green-dark)}
+.qopt.correct{background:var(--green-light);border-color:var(--green);color:var(--green-dark);cursor:default}
+.qopt.wrong{background:#fdecea;border-color:#e74c3c;color:#922b21;cursor:default}
+.qopt.off{pointer-events:none}
+.qres{font-size:13px;padding:10px 14px;border-radius:var(--radius);display:none;margin-top:4px}
+.qres.show{display:flex;align-items:center;gap:6px}
+.qres.pass{background:var(--green-light);color:var(--green-dark)}
+.qres.fail{background:#fdecea;color:#922b21}
+
+/* ADMIN */
+#screen-admin{flex-direction:column;align-items:stretch}
+.admin-nav{background:#1a1a1a;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:100}
+.admin-nav-logo{display:flex;align-items:center;gap:8px;color:white;font-weight:600;font-size:16px}
+.admin-nav-logo-mark{width:28px;height:28px;background:var(--green);border-radius:7px;display:flex;align-items:center;justify-content:center}
+.admin-nav-logo-mark i{color:white;font-size:14px}
+.admin-badge{font-size:11px;font-weight:600;background:rgba(29,158,117,0.25);color:var(--green);padding:3px 10px;border-radius:12px;border:0.5px solid rgba(29,158,117,0.3)}
+.admin-nav-right{display:flex;align-items:center;gap:10px}
+.admin-nav-logout{background:none;border:0.5px solid rgba(255,255,255,0.2);padding:5px 12px;border-radius:8px;font-size:13px;cursor:pointer;color:rgba(255,255,255,0.7);font-family:'DM Sans',sans-serif}
+.admin-nav-logout:hover{border-color:rgba(255,255,255,0.4);color:white}
+.admin-body{padding:2rem;max-width:1100px;margin:0 auto;width:100%}
+.admin-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.75rem}
+.admin-title{font-size:22px;font-weight:600;letter-spacing:-0.3px}
+.admin-title span{color:var(--text-3);font-weight:400;font-size:16px;margin-left:6px}
+.btn-add{background:var(--green);color:white;border:none;padding:9px 18px;border-radius:var(--radius);font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif}
+.btn-add:hover{background:var(--green-mid)}
+.admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.75rem}
+.admin-stat{background:var(--bg-card);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px 16px}
+.admin-stat-label{font-size:11px;font-weight:500;color:var(--text-3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px}
+.admin-stat-value{font-size:28px;font-weight:600;letter-spacing:-0.5px}
+.coach-table-wrap{background:var(--bg-card);border:0.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+.coach-table-head{display:grid;grid-template-columns:1.8fr 1fr 1.5fr 1fr 80px;gap:0;border-bottom:0.5px solid var(--border);padding:10px 18px;background:var(--bg-2)}
+.coach-table-head span{font-size:11px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.06em}
+.coach-row{display:grid;grid-template-columns:1.8fr 1fr 1.5fr 1fr 80px;gap:0;padding:14px 18px;border-bottom:0.5px solid var(--border);align-items:center;cursor:pointer;transition:background 0.1s}
+.coach-row:last-child{border-bottom:none}
+.coach-row:hover{background:var(--bg-2)}
+.coach-name{font-size:14px;font-weight:500;display:flex;align-items:center;gap:8px}
+.coach-avatar{width:30px;height:30px;border-radius:50%;background:var(--green-light);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--green-dark);flex-shrink:0}
+.coach-done{font-size:14px;font-weight:600}
+.coach-prog-wrap{display:flex;align-items:center;gap:8px}
+.coach-prog-track{flex:1;height:5px;background:var(--bg-2);border-radius:3px;overflow:hidden}
+.coach-prog-fill{height:100%;background:var(--green);border-radius:3px}
+.coach-prog-pct{font-size:12px;font-weight:600;color:var(--green);min-width:32px}
+.coach-last{font-size:12px;color:var(--text-3)}
+.coach-actions{display:flex;gap:6px;justify-content:flex-end}
+.btn-remove{background:none;border:0.5px solid var(--border-2);padding:4px 8px;border-radius:6px;font-size:12px;cursor:pointer;color:var(--text-3);font-family:'DM Sans',sans-serif}
+.btn-remove:hover{border-color:#e74c3c;color:#e74c3c;background:#fdecea}
+.detail-panel{background:var(--bg-card);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;margin-top:1.75rem;display:none}
+.detail-panel.open{display:block}
+.detail-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.detail-head h3{font-size:16px;font-weight:600}
+.detail-close{background:none;border:0.5px solid var(--border-2);padding:5px 10px;border-radius:8px;font-size:12px;cursor:pointer;color:var(--text-2);font-family:'DM Sans',sans-serif}
+.detail-lessons{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
+.detail-lesson{padding:8px 10px;border-radius:8px;font-size:12px;line-height:1.4}
+.detail-lesson.done{background:var(--green-light);color:var(--green-dark);border:0.5px solid rgba(29,158,117,0.3)}
+.detail-lesson.undone{background:var(--bg-2);color:var(--text-3);border:0.5px solid var(--border)}
+.detail-lesson-src{font-size:10px;opacity:0.7;margin-top:2px}
+.sheets-panel{background:var(--bg-card);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;margin-top:1.75rem}
+.sheets-panel-head{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600;margin-bottom:4px}
+.sheets-panel-head i{color:var(--green)}
+.sheets-panel p{font-size:13px;color:var(--text-2);margin-bottom:1rem;line-height:1.6}
+.sheets-url-row{display:flex;gap:8px}
+.sheets-url-input{flex:1;padding:9px 14px;border:0.5px solid var(--border-2);border-radius:var(--radius);font-family:'DM Mono',monospace;font-size:12px;color:var(--text);background:var(--bg)}
+.sheets-url-input:focus{outline:none;border-color:var(--green)}
+.btn-save-url{background:var(--green);color:white;border:none;padding:9px 16px;border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif}
+.sheets-status{font-size:12px;margin-top:8px;color:var(--text-3)}
+.sheets-status.connected{color:var(--green)}
+.code-block{background:#1a1a1a;border-radius:var(--radius);padding:1rem;margin-top:1rem;overflow-x:auto}
+.code-block pre{font-family:'DM Mono',monospace;font-size:12px;color:#a8e6cf;white-space:pre;line-height:1.6}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="screen-login" class="screen active">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-mark"><i class="ti ti-school"></i></div>
+      <div>
+        <div class="login-logo-text">FHC Learn</div>
+        <div class="login-logo-sub">Coach Education Portal</div>
+      </div>
+    </div>
+    <div class="login-label">Select your name</div>
+    <select class="login-select" id="coach-select">
+      <option value="">— choose coach —</option>
+    </select>
+    <button class="login-btn" id="login-btn" onclick="loginCoach()" disabled>
+      <i class="ti ti-arrow-right"></i> Enter portal
+    </button>
+    <div class="login-divider">or</div>
+    <button class="admin-link" onclick="openAdminModal()">
+      <i class="ti ti-shield-lock" style="vertical-align:-2px;margin-right:4px"></i> Admin access
+    </button>
+  </div>
+</div>
+
+<!-- ADMIN PW MODAL -->
+<div class="modal-overlay" id="admin-modal">
+  <div class="modal">
+    <h3>Admin access</h3>
+    <p>Enter the admin password to view all coach progress and manage the portal.</p>
+    <input type="password" id="admin-pw" placeholder="••••••••" maxlength="20">
+    <div class="modal-err" id="admin-err">Incorrect password. Try again.</div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeAdminModal()">Cancel</button>
+      <button class="btn-confirm" onclick="checkAdminPw()">Enter</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD COACH MODAL -->
+<div class="modal-overlay" id="add-modal">
+  <div class="add-modal">
+    <h3>Add new coach</h3>
+    <p>Enter the coach's full name. They'll appear in the login list immediately.</p>
+    <label>Full name</label>
+    <input type="text" id="new-coach-name" placeholder="e.g. Sarah Thompson">
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeAddModal()">Cancel</button>
+      <button class="btn-confirm" onclick="addCoach()">Add coach</button>
+    </div>
+  </div>
+</div>
+
+<!-- PORTAL -->
+<div id="screen-portal" class="screen">
+  <nav class="portal-nav">
+    <div class="nav-logo">
+      <div class="nav-logo-mark"><i class="ti ti-school"></i></div>
+      FHC Learn
+    </div>
+    <div class="nav-right">
+      <div class="nav-coach"><div class="nav-coach-dot"></div><span id="nav-coach-name"></span></div>
+      <button class="nav-logout" onclick="logout()"><i class="ti ti-logout" style="vertical-align:-2px;margin-right:3px"></i> Sign out</button>
+    </div>
+  </nav>
+  <div class="portal-body">
+    <div class="stat-row">
+      <div class="stat"><div class="stat-label">Completed</div><div class="stat-value" id="s-done">0</div><div class="stat-sub">of 45 lessons</div></div>
+      <div class="stat"><div class="stat-label">Pillars</div><div class="stat-value">5</div><div class="stat-sub">topic areas</div></div>
+      <div class="stat"><div class="stat-label">Quiz avg</div><div class="stat-value" id="s-quiz">—</div><div class="stat-sub">accuracy</div></div>
+      <div class="stat"><div class="stat-label">Sources</div><div class="stat-value">6</div><div class="stat-sub">OPEX · ALP · Hormozi · 2BB</div></div>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-label">Overall progress</div>
+      <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+      <div class="prog-pct" id="prog-pct">0%</div>
+    </div>
+    <div class="pillar-tabs" id="pillar-tabs"></div>
+    <div class="viewer" id="viewer"></div>
+    <div class="lesson-grid" id="lesson-grid"></div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="screen-admin" class="screen">
+  <nav class="admin-nav">
+    <div class="admin-nav-logo">
+      <div class="admin-nav-logo-mark"><i class="ti ti-school"></i></div>
+      FHC Learn
+      <span class="admin-badge">Admin</span>
+    </div>
+    <div class="admin-nav-right">
+      <button class="admin-nav-logout" onclick="logout()"><i class="ti ti-logout" style="vertical-align:-2px;margin-right:3px"></i> Sign out</button>
+    </div>
+  </nav>
+  <div class="admin-body">
+    <div class="admin-header">
+      <div class="admin-title">Coach progress <span id="admin-subtitle"></span></div>
+      <button class="btn-add" onclick="openAddModal()"><i class="ti ti-plus"></i> Add coach</button>
+    </div>
+    <div class="admin-stats" id="admin-stats"></div>
+    <div class="coach-table-wrap">
+      <div class="coach-table-head">
+        <span>Coach</span><span>Completed</span><span>Progress</span><span>Last active</span><span></span>
+      </div>
+      <div id="coach-table"></div>
+    </div>
+    <div class="detail-panel" id="detail-panel">
+      <div class="detail-head">
+        <h3 id="detail-name"></h3>
+        <button class="detail-close" onclick="closeDetail()">Close</button>
+      </div>
+      <div class="detail-lessons" id="detail-lessons"></div>
+    </div>
+    <div class="sheets-panel">
+      <div class="sheets-panel-head"><i class="ti ti-table"></i> Google Sheets integration</div>
+      <p>Paste your Apps Script web app URL below to automatically sync all coach completions to your Google Sheet. Each coach gets their own tab, updated every time a lesson is marked complete.</p>
+      <div class="sheets-url-row">
+        <input class="sheets-url-input" type="text" id="sheets-url" placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec">
+        <button class="btn-save-url" onclick="saveSheetUrl()">Save URL</button>
+      </div>
+      <div class="sheets-status" id="sheets-status">Not connected</div>
+      <div style="margin-top:1.25rem;border-top:0.5px solid var(--border);padding-top:1.25rem">
+        <div class="kp-head" style="margin-bottom:8px">Setup instructions</div>
+        <div class="kp"><i class="ti ti-circle-number-1"></i><span>Open Google Sheets → Extensions → Apps Script → paste the code below</span></div>
+        <div class="kp"><i class="ti ti-circle-number-2"></i><span>Click Deploy → New deployment → Web app → Execute as Me → Anyone can access</span></div>
+        <div class="kp"><i class="ti ti-circle-number-3"></i><span>Copy the web app URL and paste it above</span></div>
+        <div class="code-block">
+          <pre id="apps-script-code"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const ADMIN_PASSWORD = 'FHC2025admin';
+const TOTAL = 45;
+const DEFAULT_COACHES = ['Amy','Jean','Matt','Devin','Lainey','Marissa','Joyce','Xavier','Paola','Eric'];
+
+const PILLARS = [
+  {id:'all',label:'All',icon:'ti-layout-grid'},
+  {id:'programming',label:'Programming',icon:'ti-chart-line'},
+  {id:'coaching',label:'Coaching',icon:'ti-users'},
+  {id:'movement',label:'Movement',icon:'ti-run'},
+  {id:'mindset',label:'Mindset',icon:'ti-brain'},
+  {id:'business',label:'Business',icon:'ti-building-store'}
+];
+const TM = {
+  video:{cls:'tv',icon:'ti-player-play',label:'Video'},
+  article:{cls:'ta',icon:'ti-article',label:'Article'},
+  pdf:{cls:'tp',icon:'ti-file-download',label:'PDF'},
+  quiz:{cls:'tq',icon:'ti-clipboard-check',label:'Quiz'}
+};
+
+const LESSONS = [
+  {id:1,p:'programming',type:'article',title:'Periodization 101: why your members need structure, not randomness',level:'Foundations',dur:'9 min read',src:'FHC Original',vid:null,text:'Most coaches know the word periodization. Few actually apply it. If your programming is just hard workouts back to back, you\'re not programming — you\'re scheduling suffering. Suffering without structure produces plateaus, not athletes.\n\nPeriodization means planning training over time with intention. You\'re manipulating variables — volume, intensity, frequency, exercise selection — across weeks and months to create a specific adaptive response. The body doesn\'t care how hard you worked today. It cares about the cumulative signal you\'ve sent it over the last 4–8 weeks.\n\n<strong>The three levels:</strong> Macrocycle (the full year), Mesocycle (4–8 week training block with a defined goal), Microcycle (the individual week). Each serves the one above it. You can\'t design a good week without knowing what the month is trying to accomplish.',points:['A mesocycle has one primary training goal — don\'t chase two at once','Volume and intensity are inversely related at high loads — you can\'t max both','Deload every 4th week: cut volume 30–40%, maintain intensity and movement quality','Test weeks should be scheduled and predictable — members need to see their progress'],apply:'Identify which phase of the year FHC is currently in. Write the goal for the next 4-week block at your location before you write a single workout.',quiz:{q:'In periodization, what does a mesocycle refer to?',opts:['A single training session','A 4–8 week block with a defined training goal','The full annual training plan','A one-week microcycle'],ans:1}},
+  {id:2,p:'programming',type:'video',title:'OPEX: the 4 pillars of individual program design',level:'Foundations',dur:'18 min',src:'OPEX Fitness',vid:'NBS4keiEN-c',text:'This OPEX video breaks down the four pillars every design coach needs: Positioning, Assessment, Programming, and Systems. In a group training context, the framework is gold for understanding how to think about programming decisions when adapting for a room full of different capacities.\n\n<strong>FHC coaching lens:</strong> Even in group training, your programming should be assessment-driven. You see your members every week. You know who has shoulder issues, who just started six weeks ago. That knowledge should inform your decisions — not just your scaling calls on the fly.',points:['Positioning = understanding your coaching identity and who you serve','Assessment never stops — ongoing, not just a one-time baseline screen','Programming follows the person, not the template','Systems free your cognitive bandwidth for what matters: the coaching relationship'],apply:'After watching: write one thing in your current process that\'s reactive and one that could become a system — a template or decision rule you apply consistently.',quiz:{q:'According to the OPEX framework, what should programming decisions be driven by?',opts:['What workouts you enjoy doing yourself','Assessment data and the individual\'s training history','The latest programming trends','Whatever equipment is available'],ans:1}},
+  {id:3,p:'programming',type:'article',title:'Energy system development: the full picture for coaches',level:'Foundations',dur:'10 min read',src:'FHC Original',vid:null,text:'You have three energy systems. Your job is to understand when each is doing the work — and how to program each with intention.\n\n<strong>Phosphocreatine (0–12 seconds):</strong> Max effort. Full recovery takes 3–5 minutes. A 90-second AMRAP is not power work — that\'s glycolytic.\n\n<strong>Glycolytic (30 sec–2 min):</strong> The uncomfortable zone. Most CrossFit-style workouts live here — and most gym populations are over-trained here relative to the other two.\n\n<strong>Oxidative (2+ min):</strong> The most neglected system in most gyms. An athlete without aerobic base has a ceiling on their capacity to recover and perform.',points:['PCr system: max effort, 0–12 sec, full rest 3–5 min','Glycolytic: 30 sec–2 min, most over-programmed system in group gyms','Oxidative: the base that supports everything — requires sustained low-intensity work','Most members are glycolytically fit and aerobically poor — that\'s your programming gap'],apply:'Audit the last 4 weeks of your programming. Categorize each workout by primary energy system. Identify the gap and add one genuine aerobic base session per week.',quiz:{q:'Which energy system is most commonly under-developed in CrossFit-style programming?',opts:['Phosphocreatine','Glycolytic','Oxidative (aerobic base)','All three equally'],ans:2}},
+  {id:4,p:'programming',type:'article',title:'How to write a training week that actually makes sense',level:'Intermediate',dur:'8 min read',src:'FHC Original',vid:null,text:'A well-designed training week isn\'t seven workouts strung together. It\'s a sequenced stimulus plan.\n\n<strong>The sequencing rules:</strong> High neural demand first — strength and power before a brutal met-con, not after. Manage fatigue accumulation. Balance push/pull ratios. Match energy system demand to recovery capacity — if Tuesday was glycolytic, Wednesday should be aerobic-biased.',points:['Neural demand peaks early — never program heavy strength after high fatigue','48–72 hours between high-intensity work targeting the same muscle groups','Pull:push ratio across the week: minimum 1:1, ideally 1.2:1','Deload: cut volume, not intensity — maintain movement quality'],apply:'Map next week\'s programming before writing individual workouts: Day | Primary stimulus | Energy system | Intensity. No two consecutive days should share the same primary demand.',quiz:{q:'Where should heavy strength/power work ideally be placed in a training session?',opts:['After the conditioning piece when muscles are warm','Early in the session before significant fatigue accumulates','On the final day of the week','It doesn\'t matter as long as the work gets done'],ans:1}},
+  {id:5,p:'programming',type:'video',title:'OPEX: programming principles overview',level:'Foundations',dur:'22 min',src:'OPEX Fitness',vid:'rpz_HQzV70c',text:'This OPEX course preview covers the foundational principles behind intelligent program design — how to write training that produces the result you\'re after rather than just making people tired.\n\n<strong>FHC coaching lens:</strong> Most coaches are reaction programmers — they slot in movements they like and call it done. Principle-based programming means starting from the output (what do I want this person able to do in 8 weeks?) and working backwards. This is how Hodge approaches FHC programming — block goals first, then movement selection.',points:['Start with the adaptation goal — not the exercise selection','Specificity principle: the body adapts to the exact demands placed on it','Progressive overload must be systematic, not accidental','Recovery is part of the program — not a break from it'],apply:'Before your next programming session: write the 3-sentence goal for the upcoming block before opening any template or software.',quiz:{q:'What does the principle of specificity tell us about program design?',opts:['Athletes should specialize early','The body adapts to the specific demands placed on it — train what you want to improve','Variety is more important than consistency','General fitness is always the priority'],ans:1}},
+  {id:6,p:'programming',type:'pdf',title:'FHC Annual Programming Calendar Template',level:'All levels',dur:'PDF download',src:'FHC Original',vid:null,text:'The FHC programming calendar template used across PoCo and Vancouver. Outlines the full annual block structure, phase goals, testing week placement, and notes on adapting for different member populations.',points:['4 annual phases with defined focus goals for each','Test week scheduling at weeks 4, 8, and 12 of each phase','Population adaptation notes: Vancouver vs. PoCo context','Seasonal considerations for BC climate and member attendance patterns'],apply:'Complete the calendar for the current year. Share with your head coach for feedback before implementing.',quiz:null},
+  {id:7,p:'programming',type:'article',title:'Programming for different populations in one class',level:'Intermediate',dur:'8 min read',src:'FHC Original',vid:null,text:'Group programming is an exercise in design constraints. One whiteboard, potentially a masters athlete, a postpartum woman, a 22-year-old former hockey player, and someone six weeks in — all in the same room.\n\n<strong>The three-lane model:</strong> Every workout needs an A lane (performance), B lane (fitness), and C lane (foundational). Not different workouts — the same stimulus with different expressions.\n\n<strong>The stimulus is sacred. The movement is not.</strong>',points:['Design for stimulus, not movement — the movement is the delivery mechanism','Three-lane model: performance / fitness / foundational on every workout','Pre-load your scale options before class — don\'t improvise under pressure','Scaling is not making it easier. It\'s making it appropriate.'],apply:'For your next 5 workouts, write three complete scale options for each before class. Review with a fellow coach.',quiz:{q:'What does \'the stimulus is sacred, the movement is not\' mean?',opts:['You should never change the main movements','The training effect matters — the specific exercise used to achieve it can vary','This only applies to competitive athletes','Movement standards should never be modified'],ans:1}},
+  {id:8,p:'programming',type:'article',title:'Loading schemes and rep ranges: what you need to know',level:'Intermediate',dur:'7 min read',src:'FHC Original',vid:null,text:'Every rep range you write is a claim about the adaptation you\'re chasing.\n\n<strong>1–3 reps at >90%:</strong> Neural efficiency and max strength. High recovery cost, not for beginners.\n\n<strong>3–5 reps at 80–90%:</strong> Strength. Most of your strength work should live here.\n\n<strong>6–12 reps at 60–75%:</strong> Hypertrophy. Muscle mass is the foundation of long-term metabolic health. Worth more programming time than most CF gyms give it.\n\n<strong>12–20+ reps:</strong> Muscular endurance and local aerobic capacity.',points:['1–5 reps: strength and neural efficiency','6–12 reps: hypertrophy — more important for general pop than most coaches prioritize','12–20+ reps: muscular endurance and local aerobic capacity','Rest periods should match the adaptation goal — not be left to the athlete'],apply:'Look at your last two weeks of strength programming. What rep ranges dominated? What was missing? Adjust your next block accordingly.',quiz:{q:'For general population members focused on long-term health, which rep range is most commonly under-programmed?',opts:['1–3 reps for max strength','3–5 reps for neural efficiency','6–12 reps for hypertrophy and muscle mass','Only cardio matters for general population'],ans:2}},
+  {id:9,p:'programming',type:'article',title:'Testing and benchmarks: showing members they\'re getting better',level:'All levels',dur:'6 min read',src:'FHC Original',vid:null,text:'Members don\'t quit because training is hard. They quit because they can\'t see it\'s working.\n\nBenchmark workouts and testing weeks solve this. When a member PRs a back squat or finishes a benchmark 3 minutes faster than six months ago, they have undeniable evidence that what they\'re doing is working.\n\n<strong>How to structure testing:</strong> Test the same things consistently. Test predictably before and after each block. Track and display results so members have a reason to push.',points:['Consistent benchmarks > novel tests — you need comparable data to show progress','Test weeks at predictable intervals create culture around measurement','Members need visible evidence of improvement to stay motivated','3–5 benchmark workouts per year is enough — use them religiously'],apply:'Identify your 3 current benchmark workouts. If you don\'t have a defined set, establish them this week. Schedule the next test week.',quiz:{q:'Why are consistent benchmark workouts important for member retention?',opts:['They make programming easier to write','They provide visible evidence of progress over time','They allow coaches to identify weak movements','They\'re required for affiliate certification'],ans:1}},
+  {id:10,p:'coaching',type:'video',title:'Active Life: how to work with and around pain',level:'All levels',dur:'20 min',src:'Active Life Professional',vid:'6edyk4cLpQo',text:'One of the most practically useful videos you\'ll watch. Active Life Professional\'s framework for working with members in pain — without shutting them down or making things worse — is exactly what every group fitness coach needs.\n\n<strong>The core principle:</strong> "If it hurts, don\'t do it" is not coaching. It\'s abdication. A trained coach finds a way to keep the athlete moving, finds the expression of the stimulus that doesn\'t provoke pain, and builds confidence rather than fear around movement.',points:['Pain is not a stop sign — it\'s information to work with','Modify the movement to find pain-free range, then build from there','Keeping athletes moving through appropriate work speeds recovery and confidence','Document what works for each member — build your personal reference library'],apply:'Identify one member currently dealing with pain. Apply the Active Life framework: what modification allows them to train? What does progression look like over 4 weeks?',quiz:{q:'What does the Active Life approach say about pain in training?',opts:['Pain always means stop — never train through any discomfort','Pain is information — a skilled coach finds modifications to keep athletes moving','Only medical professionals should handle pain decisions','Pain should be ignored if the athlete is willing to continue'],ans:1}},
+  {id:11,p:'coaching',type:'article',title:'The cueing hierarchy: how to communicate on the training floor',level:'Foundations',dur:'8 min read',src:'FHC Original',vid:null,text:'Most coaches cue too much, too early, and too internally.\n\n<strong>External cues beat internal cues.</strong> Motor learning research is clear: \'push the floor away\' (external) produces better movement outcomes than \'squeeze your glutes\' (internal). External cues direct attention to the effect of movement — how the nervous system learns most efficiently.\n\n<strong>The FHC cueing hierarchy:</strong> Observe 2–3 reps before intervening. One cue per set. External before internal. Analogy cues are your most powerful tool. Feedback after the set, not during.',points:['External cues outperform internal cues in motor learning research consistently','One cue per set — multiple cues are just noise the athlete can\'t process under load','Analogy cues are your highest-leverage coaching tool — build your personal library','Observe 2–3 reps before cueing — let the self-correction system work first'],apply:'For your next 3 sessions, limit yourself to one cue per athlete per set. Track which cue types produce visible changes.',quiz:{q:'Why do external cues generally produce better movement outcomes than internal cues?',opts:['They\'re louder and more memorable','They direct attention to the effect of movement — how the nervous system learns best','They\'re easier to deliver quickly','Internal cues are actually superior according to research'],ans:1}},
+  {id:12,p:'coaching',type:'article',title:'Feedback that sticks: the one-cue model',level:'Foundations',dur:'6 min read',src:'FHC Original',vid:null,text:'Research on feedback in skill acquisition shows something counterintuitive: less feedback produces more learning. When athletes receive feedback after every rep, they become dependent on it and stop developing their own error-detection system.\n\n<strong>The model:</strong> Let them do 2–3 reps. Identify the ONE highest-leverage change. Deliver it after the set — one sentence, external cue preferred. Watch the next set. Move to the next cue only when the current one is owned.',points:['Reduced feedback frequency increases retention — less is genuinely more','Identify the single highest-leverage cue — not everything you observe','After the set, not during — mid-rep interruptions disrupt motor learning','Move to the next cue only when the current one is owned'],apply:'After every set you cue this week, write down the cue used and whether it produced a visible change. Review the log at week\'s end.',quiz:{q:'What does \'feedback bandwidth\' research tell us about coaching?',opts:['Give feedback after every single rep for best results','Less frequent, well-timed feedback produces more learning than constant correction','Feedback is less important than sets and reps','Only verbal feedback counts'],ans:1}},
+  {id:13,p:'coaching',type:'article',title:'Class energy management: how great coaches control the room',level:'Intermediate',dur:'7 min read',src:'FHC Original',vid:null,text:'Great coaches don\'t just coach movement. They manage energy. A one-hour class has a specific arc — and the coach shapes it.\n\n<strong>The four phases:</strong> Arrival/warm-up — energy rising. Skill/strength — focused, quieter, more precise coaching. Conditioning — peak energy, shift to safety and encouragement. Cool-down — descending energy, calm the room intentionally.\n\n<strong>Your presence is the instrument.</strong> Volume, pace, physical energy — all of it communicates before your words do.',points:['Your energy sets the ceiling for the room — what you bring, they feel','Warm-up: rising. Strength: focused. Met-con: peak. Cool-down: descending.','Physical presence communicates more than words — use space and eye contact','End every class intentionally — the last 5 minutes shapes how members feel about the hour'],apply:'Record yourself coaching a full class. Watch it back with sound off. What does your body language communicate at each phase?',quiz:{q:'During the conditioning piece, what should the coach\'s primary focus shift to?',opts:['Programming cues for next week','Safety, execution under fatigue, and individual encouragement','Introducing new skill concepts while athletes are warm','Managing music and whiteboard logistics'],ans:1}},
+  {id:14,p:'coaching',type:'video',title:'OPEX: the coach\'s blueprint — positioning, assessment, systems',level:'Intermediate',dur:'25 min',src:'OPEX Fitness',vid:'NBS4keiEN-c',text:'One of the most clarifying videos OPEX has published about what a professional coach actually does. Four clearly defined responsibilities: know who you serve, assess constantly, design intelligently, build systems that scale.\n\n<strong>FHC application:</strong> Watch this as a reflection exercise. After 25 minutes, ask yourself honestly: which of the four pillars is your biggest gap right now?',points:['Positioning: you need a clear answer to \'who do I serve and what do I promise?\'','Assessment is ongoing — not a one-time baseline intake','Programming follows the person\'s needs, not the coach\'s preferences','Systems multiply impact — consistent delivery regardless of how you\'re feeling'],apply:'Write one paragraph on each of the four pillars as it applies to your coaching at FHC right now. Share with Hodge at your next 1:1.',quiz:{q:'What do coaching systems allow a coach to do?',opts:['Replace the need for assessment','Coach at scale without dropping quality — consistent delivery regardless of day or mood','Automate their entire programming process','Avoid difficult conversations with members'],ans:1}},
+  {id:15,p:'coaching',type:'article',title:'Coaching difficult conversations: the framework',level:'Intermediate',dur:'7 min read',src:'FHC Original',vid:null,text:'Three conversations every coach eventually has: the plateau conversation, the attitude conversation, and the attendance conversation. Most coaches avoid all three. The ones who have them — directly, respectfully, early — build deeper relationships and better outcomes.\n\n<strong>The framework:</strong> Observation not interpretation. Curiosity before correction. Offer the next step. Keep it short and direct.\n\n<strong>The biggest mistake:</strong> waiting too long. A conversation at 3 absences is easy. At 10, it\'s almost a save attempt.',points:['Observation not interpretation — state facts, not your story about them','Curiosity before correction — ask first, advise second','Offer the next step — close the loop and stay in partnership mode','Have it early — at 3 absences, not 10. Early conversations save relationships.'],apply:'Identify one member who needs one of these three conversations. Have it this week. Debrief with a fellow coach afterward.',quiz:{q:'In a difficult conversation with a member, what should come before correction?',opts:['A detailed explanation of why their behavior is problematic','Curiosity — asking questions to understand what\'s actually going on','Documenting the conversation in writing first','Looping in the head coach before proceeding'],ans:1}},
+  {id:16,p:'coaching',type:'article',title:'What great coaching looks like on the floor',level:'Foundations',dur:'6 min read',src:'FHC Original',vid:null,text:'The FHC coaching standard.\n\n<strong>Present:</strong> Phone not in hand. Eyes on athletes. Genuine attention and eye contact.\n\n<strong>Intentional:</strong> You know why today\'s workout exists. Scaled versions ready before class. Not making decisions on the fly that should have been made hours earlier.\n\n<strong>Personal:</strong> You use names. You remember that Sarah has a knee issue, Marcus just got back from vacation. People feel seen.\n\n<strong>Honest:</strong> You give the cue that serves the athlete, not the one that keeps the peace.',points:['Present: phone away, eyes on athletes, full attention — non-negotiable','Intentional: you know why today\'s workout exists and what it\'s meant to produce','Personal: use names, remember details, make individuals feel genuinely seen','Honest: the cue that serves them — even when it\'s uncomfortable to deliver'],apply:'Ask a fellow coach to observe you coaching one full class this week and give you honest feedback on each of the four qualities.',quiz:{q:'What does \'honest\' coaching mean on the floor at FHC?',opts:['Sharing personal opinions about members\' fitness','Giving the cue that serves the athlete — even when it\'s uncomfortable to deliver','Never giving negative feedback to avoid discouraging members','Being honest about your own fitness limitations'],ans:1}},
+  {id:17,p:'coaching',type:'article',title:'Building your coaching voice and presence',level:'Intermediate',dur:'6 min read',src:'FHC Original',vid:null,text:'Coaching voice is not about volume. It\'s about clarity, pacing, and the felt sense of authority that comes from someone who knows what they\'re doing and is fully present.\n\n<strong>Volume</strong> is a tool, not a default. <strong>Pacing</strong> signals confidence — rushing signals uncertainty, deliberate delivery signals control. <strong>Word economy</strong> — silence between thoughts beats filler words. <strong>Physical presence</strong> — where you stand matters.',points:['Volume is a tool — modulate it to match the moment, not your default','Slow pacing signals confidence — rushing signals uncertainty','Word economy: silence between thoughts beats filler words','Positioning: center for instruction, edges for observation, close for individual coaching'],apply:'Record one class. Watch the first 10 minutes back. Score yourself on each element. Pick one to improve next class.',quiz:{q:'Why does slower pacing in coaching communication signal confidence?',opts:['It allows more information to be delivered','It signals you\'re in control and the information matters — rushing signals uncertainty','Slow coaches are perceived as more experienced','It gives athletes more time to take notes'],ans:1}},
+  {id:18,p:'coaching',type:'article',title:'Coaching the masters athlete: what changes after 40',level:'Intermediate',dur:'7 min read',src:'FHC Original',vid:null,text:'Masters athletes are not broken younger athletes. They\'re a specific population with specific physiology.\n\n<strong>What changes:</strong> Recovery is slower and needs more infrastructure. Connective tissue adapts more slowly — volume spikes are riskier. Neural drive requires active maintenance — power and explosiveness decline fastest with age but respond to training.\n\n<strong>What doesn\'t change:</strong> Adaptability, coachability, motivation, and the fundamentals of periodization.',points:['Recovery cost is higher — masters athletes need more between sessions','Connective tissue adapts slower — avoid volume spikes, favor gradual progression','Power qualities decline fastest — but respond to training; program them intentionally','The fundamentals don\'t change — progressive overload and periodization still apply'],apply:'Identify two masters athletes at your location. Review their load over the last 4 weeks. Is it appropriate for their recovery capacity?',quiz:{q:'Which physical quality declines fastest with age but still responds well to training?',opts:['General strength','Flexibility','Power and explosive capacity','Aerobic endurance'],ans:2}},
+  {id:19,p:'coaching',type:'article',title:'New member onboarding: the first 30 days',level:'All levels',dur:'6 min read',src:'FHC Original',vid:null,text:'The first 30 days determine whether a new member becomes a long-term member.\n\n<strong>Week 1:</strong> Learn their name before their second class — from actually talking to them. Know one thing about their life outside training.\n\n<strong>Week 2:</strong> Check in on their experience. This is coaching, not customer service.\n\n<strong>Week 3:</strong> Connect them to another member. Belonging accelerates retention.\n\n<strong>Week 4:</strong> Acknowledge what you\'ve seen them achieve. Specific, honest, earned.',points:['Learn names before the second class — non-negotiable at FHC','Week 2 check-in: assess experience and adjust — this is coaching, not nicety','Social connection accelerates retention — make introductions deliberately','Week 4 acknowledgment must be specific and earned — not generic praise'],apply:'Identify every new member who joined in the last 30 days. Where are they in the onboarding arc? What\'s been missed?',quiz:{q:'What must acknowledgment in week 4 of onboarding be?',opts:['Generic and encouraging to build confidence','Specific and earned — based on actual observed progress','Always related to physical performance metrics','Delivered only if the member attended every class'],ans:1}},
+  {id:20,p:'movement',type:'video',title:'Active Life: movement screen for coaches',level:'Foundations',dur:'25 min',src:'Active Life Professional',vid:'TVdxVWKxQQE',text:'Active Life Professional\'s movement screen is one of the most practically applicable tools for a group fitness coach. You\'re not a physio — but you see your members move repeatedly, every week. That gives you a dataset no clinical professional has. This screen gives you a structured way to make sense of what you\'re seeing and act on it intelligently.',points:['Movement screening gives you a baseline — not a ceiling or disqualification','A deficit is a starting point, not a reason to avoid the movement','Screen results should inform your scaling decisions proactively','Document findings — patterns across your member base tell you where to focus programming'],apply:'Run the Active Life movement screen on 3 new members this month. Document results. After 4 weeks, reassess.',quiz:{q:'What is the primary purpose of a movement screen in a group fitness coaching context?',opts:['To identify members who should not be training','To create a baseline that informs appropriate loading and scaling decisions','To replace a physiotherapy assessment','To rank members by movement quality'],ans:1}},
+  {id:21,p:'movement',type:'article',title:'The squat: coaching every variation from the ground up',level:'Foundations',dur:'10 min read',src:'FHC Original',vid:null,text:'The squat is the most frequently coached and most frequently miscued movement in a gym.\n\n<strong>Start with ankle dorsiflexion.</strong> It\'s the most common limiting factor. Tight ankles create compensations upstream.\n\n<strong>Hip structure is not a coaching problem.</strong> Your job is to find their squat, not force them into a textbook shape.\n\n<strong>The coaching sequence:</strong> Foot position → Knee tracking → Torso position → Depth → Load. Load is earned after movement quality.',points:['Ankle dorsiflexion is the most common squat limiter — check it first','Hip structure is anatomy, not a fault — find the individual\'s pattern','Foot position is individual — there is no universal stance width','Load is earned after movement quality. Never the reverse.'],apply:'Coach 5 different athletes through a squat assessment this week. Identify which limiter (ankle, hip, thoracic, motor pattern) is primary for each.',quiz:{q:'What is the most common limiting factor in a squat pattern that coaches frequently overlook?',opts:['Core weakness','Hip flexor tightness','Ankle dorsiflexion restriction','Poor thoracic mobility'],ans:2}},
+  {id:22,p:'movement',type:'article',title:'The hip hinge: diagnosing and correcting the most miscued pattern',level:'Intermediate',dur:'8 min read',src:'FHC Original',vid:null,text:'The hip hinge is the most miscued pattern in the gym.\n\n<strong>What a genuine hinge looks like:</strong> Hips move back while the spine maintains its natural curve. Load is on the hamstrings — a genuine stretch reflex at end-range hip flexion.\n\n<strong>The most common fault:</strong> Squatting the deadlift. Hips drop, knees come forward, bar drifts.\n\n<strong>Best cue:</strong> \'Drag the bar up your shins.\' Keeps bar path right and posterior chain engaged. The \'push the floor away\' cue turns a deadlift into a squat.',points:['The hinge is posterior chain work — hamstrings should be the primary felt sensation','Most athletes squat their deadlift — hips too low, back does too much work','Dowel rod drill: 3 points of contact teaches neutral spine without overthinking','Cue: \'drag the bar up your shins\' — fixes bar path and loading simultaneously'],apply:'Film 3 athletes doing a Romanian deadlift from the side. Identify where the pattern breaks down for each. Write one specific cue for each fault.',quiz:{q:'What does the cue \'drag the bar up your shins\' achieve in the deadlift?',opts:['It encourages faster bar speed','It keeps the bar close, maintaining posterior chain engagement and correct bar path','It cues the athlete to focus on their shins specifically','It has no mechanical benefit — it\'s just motivational'],ans:1}},
+  {id:23,p:'movement',type:'article',title:'The overhead position: why it matters and how to develop it',level:'Intermediate',dur:'8 min read',src:'FHC Original',vid:null,text:'Overhead capacity is a window into global mobility.\n\n<strong>Common faults:</strong> Shoulders dump forward = lat tightness + anterior capsule restriction. Ribs flare + low back extends = borrowed range from the lumbar spine because thoracic extension isn\'t available. Don\'t just cue \'ribs down\' repeatedly — they\'re not ignoring you, they don\'t have the mobility to comply.',points:['Overhead capacity reflects thoracic spine, shoulder, and lat mobility simultaneously','A stable overhead lockout must be established before loading overhead squats','Shoulder dump forward = lat tightness + anterior capsule restriction','Rib flare = borrowed lumbar range — address thoracic extension, not just the cue'],apply:'Run an overhead screen on 5 athletes. For each, identify the primary limiter. Write a 4-week mobility plan for one of them.',quiz:{q:'When an athlete\'s ribs flare in an overhead position, what is usually the underlying cause?',opts:['Weak core muscles','Lack of thoracic extension — borrowing range from the lumbar spine','Poor shoulder strength','Incorrect breathing pattern'],ans:1}},
+  {id:24,p:'movement',type:'video',title:'Active Life: thoracic rotation drill for coaches to teach',level:'All levels',dur:'8 min',src:'Active Life Professional',vid:'QWwiOHexU8I',text:'Thoracic mobility is the foundation of overhead capacity, rotation quality, and safe spinal loading. This Active Life demo breaks down quadruped thoracic rotation — one of the highest-ROI mobility drills you can teach.\n\n<strong>Why this matters:</strong> The majority of your members sit for 8+ hours a day. Their thoracic spines are stiff. Before cueing an overhead position repeatedly, give them a tool to develop the capacity the cue requires.',points:['Thoracic stiffness is the norm for sedentary adults — assume it until proven otherwise','Quadruped T-spine rotation: one of the highest-ROI mobility drills available','2 sets of 10 reps per side before overhead or rotational work — teach it once, use it always','Visible range improvement within a single session — members feel the difference immediately'],apply:'Add this drill to your warm-up sequence this week for any session with overhead or rotational demand.',quiz:{q:'Why is thoracic mobility so important to address before overhead work?',opts:['The thoracic spine is the primary mover in pressing','Most adults have stiff thoracic spines from sitting, limiting overhead range','Thoracic rotation is only relevant for throwing athletes','It matters for aesthetics but not performance'],ans:1}},
+  {id:25,p:'movement',type:'article',title:'Push and pull: coaching the upper body patterns right',level:'Foundations',dur:'7 min read',src:'FHC Original',vid:null,text:'Upper body programming is where most gyms fail their members\' long-term shoulder health. The problem: too much push, not enough pull.\n\n<strong>The shoulder health equation:</strong> For every pushing pattern, you need at least equal pulling volume. Most programming gets this wrong by 2:1 in favor of pushing.\n\n<strong>Coaching the pull:</strong> Initiate with the scapulae, not the arms. Most athletes arm-pull — teach scapular depression and retraction first.',points:['Pull:push ratio should be at minimum 1:1, ideally 1.2:1 for shoulder health','Most commercial programming fails here — audit yours honestly','Push faults: elbow flare increases impingement risk — cue 45 degrees from body, not 90','Pull pattern: initiate with scapulae, not arms — teach scapular depression first'],apply:'Review your last 4 weeks of programming. Count push vs. pull volume. Calculate the ratio. Adjust the next block.',quiz:{q:'What pull:push ratio best supports long-term shoulder health?',opts:['2:1 push to pull is optimal','1:1 minimum, with 1.2:1 pull to push being better','Push volume doesn\'t affect shoulder health if technique is good','Only pull exercises matter for shoulder health'],ans:1}},
+  {id:26,p:'movement',type:'article',title:'Core training that actually transfers',level:'Intermediate',dur:'7 min read',src:'FHC Original',vid:null,text:'The core is not a six-pack. It\'s a 360-degree system whose primary function is preventing unwanted motion of the spine while force is transferred through the body.\n\n<strong>The four functions:</strong> Anti-extension (plank, ab wheel, hollow hold). Anti-lateral flexion (suitcase carries). Anti-rotation (Pallof press). Hip-to-shoulder force transfer (deadlifts, carries, overhead work — the most functionally relevant category).',points:['The core\'s primary job is preventing unwanted spinal motion, not creating it','Four functions: anti-extension, anti-lateral flexion, anti-rotation, force transfer','Deadlifts and carries train core function better than most dedicated \'ab workouts\'','Program one drill of each anti-direction per week — don\'t just plank'],apply:'Audit your current core programming. Which of the four functions is missing? Add one targeted drill in each category for the next month.',quiz:{q:'What is the primary function of the core in loaded athletic movement?',opts:['Flexing the spine to generate power','Preventing unwanted spinal motion while force is transferred through the body','Stabilizing the pelvis during aerobic exercise only','Generating rotational power in all movements'],ans:1}},
+  {id:27,p:'movement',type:'article',title:'Warm-up design: what it\'s actually for',level:'Foundations',dur:'6 min read',src:'FHC Original',vid:null,text:'A warm-up has three jobs: raise core temperature, prepare movement patterns specific to the session, and prime the nervous system. A 5-minute stretch followed by \'grab a bar\' fails all three.\n\n<strong>The FHC framework:</strong> General (3–5 min) — raise heart rate, not create fatigue. Movement specific (5–7 min) — drill patterns that appear in today\'s session. Neural priming (2–3 min) — light practice sets of the working movement.',points:['Three purposes: raise temperature, prepare patterns, prime the nervous system','Movement-specific prep should mirror session demands — not be generic','Neural priming: light practice sets before working load','A warm-up is not a workout — stop before accumulating fatigue'],apply:'Review the warm-up you use most often. Does it serve all three purposes? Redesign one using the three-phase framework.',quiz:{q:'What is the most common mistake coaches make when designing warm-ups?',opts:['Making them too short','Making them so demanding they create fatigue before the actual training','Not including enough stretching','Failing to use equipment'],ans:1}},
+  {id:28,p:'movement',type:'article',title:'Injury prevention mindset: the coach\'s responsibility',level:'All levels',dur:'6 min read',src:'FHC Original',vid:null,text:'Injuries are not random. Most are predictable — the product of load exceeding capacity, technique breaking down under fatigue, or progression moving faster than connective tissue can handle.\n\n<strong>The coach\'s role:</strong> Manage cumulative load across weeks. Protect technique under fatigue — the point where technique breaks is the cap. Know your at-risk members by name. Create an environment where members report pain early.',points:['Most injuries are predictable — load exceeded capacity over time','Protect technique under fatigue — this is when injury risk spikes highest','Know your at-risk members by name and manage their load actively','Create an environment where members report pain early — early information changes outcomes'],apply:'Create a list of your top 5 at-risk members right now. What specific measures are you taking for each one?',quiz:{q:'When is an athlete\'s injury risk highest during training?',opts:['During the warm-up before muscles are ready','When technique breaks down under fatigue','During the heaviest set of the day','At the start of a new training block'],ans:1}},
+  {id:29,p:'mindset',type:'article',title:'Identity shift: the first shift of resilient leadership',level:'Foundations',dur:'8 min read',src:'FHC — The 4 Shifts',vid:null,text:'The Identity Shift is the first of The 4 Shifts of Resilient Leadership — and the one that makes every other shift possible.\n\nMost coaches coach from their current self-concept, not their potential. "I\'m not a people person." "I\'m not confident with new members." Those aren\'t facts — they\'re stories. Stories can be rewritten.\n\n<strong>The identity question:</strong> Who do you need to become to coach at the level you\'re capable of? Not what skills — who?\n\n<strong>The practice:</strong> Daily. "What would a world-class coach do here?" Over time you stop asking because the answer becomes automatic. That\'s the identity shift.',points:['Your coaching ceiling is your current self-concept — change the identity to raise the ceiling','Identity is not fixed — it\'s built through deliberate daily choices','The question: "What would a world-class coach do here?" — use it daily','You don\'t rise to your goals. You fall to your systems and standards.'],apply:'Write three sentences: "As a coach, I am..." (current honest state). Then three more: same phrase, who you\'re becoming. Read the second set every morning for two weeks.',quiz:{q:'What determines a coach\'s current ceiling according to The 4 Shifts Identity framework?',opts:['The quality of their certifications','Their current self-concept — the identity they\'ve built and operate from','How many years of experience they have','The quality of their gym\'s programming'],ans:1}},
+  {id:30,p:'mindset',type:'article',title:'The systems shift: how great coaches build repeatability',level:'Intermediate',dur:'7 min read',src:'FHC — The 4 Shifts',vid:null,text:'The Systems Shift is the second of The 4 Shifts. A coach operating on talent and instinct alone produces great individual sessions. A coach who has built systems produces great outcomes consistently — regardless of what\'s happening in their personal life or how tired they are.\n\n<strong>What a system is:</strong> A decision made once, applied repeatedly. A warm-up template. A class structure that flows predictably. A 30-day onboarding process that runs for every new member without rebuilding each time.\n\n<strong>Build one system this month.</strong>',points:['A system is a decision made once, applied repeatedly — not reinvented each time','Systems free cognitive bandwidth for the coaching relationship','Good systems are foundations, not cages — deviate deliberately, not by default','Start with one: identify one reactive decision and build a system around it'],apply:'Identify the three most cognitively expensive parts of your coaching week. Pick one. Build a simple system — checklist, template, or decision rule — that makes it automatic.',quiz:{q:'What is the core benefit of coaching systems over relying purely on instinct?',opts:['Systems make coaching faster','Consistent outcomes regardless of how the coach is feeling — quality doesn\'t depend on the day','Systems impress gym owners and members','They allow coaches to delegate all decisions'],ans:1}},
+  {id:31,p:'mindset',type:'article',title:'The people shift: coaching humans, not athletes',level:'Intermediate',dur:'7 min read',src:'FHC — The 4 Shifts',vid:null,text:'The People Shift is the third of The 4 Shifts. Coaching is fundamentally a human relationship — and every person in your class is bringing more than their body to the room.\n\nThey\'re bringing a hard week at work. A body image story that predates their membership by 20 years. A fear of looking incompetent in front of others.\n\n<strong>What this means:</strong> Behavior on the training floor is often not about training. Coaches who understand this don\'t take behavior personally. They get curious. "What\'s actually happening here?"',points:['Members bring their full lives — behavior on the floor is often not about training','Don\'t take behavior personally — get curious. "What\'s actually happening here?"','Know something real about each member — not their PR, their life','From \'athlete management\' to \'human relationship\' — that\'s the shift'],apply:'Think of one member whose behavior has frustrated you recently. Ask: what might be happening in their life that explains this? Change your approach next time you see them.',quiz:{q:'When a member\'s behavior is difficult or disengaged, what does The People Shift say a coach should do first?',opts:['Address the behavior directly with clear consequences','Get curious — ask what might actually be happening in their life','Reduce their training load to lower the pressure','Defer to the gym owner to handle it'],ans:1}},
+  {id:32,p:'mindset',type:'article',title:'The impact shift: why your coaching matters beyond the gym',level:'All levels',dur:'6 min read',src:'FHC — The 4 Shifts',vid:null,text:'The Impact Shift is the fourth of The 4 Shifts. What happens in a good gym doesn\'t stay in the gym.\n\nThe member who gets stronger shows up differently at work. The parent at 6am three days a week is more patient at home. The 50-year-old who PR\'d their first pull-up walks taller in the parking lot. These aren\'t side effects of great coaching — they\'re the point.\n\n<strong>What the Impact Shift does:</strong> It makes the job matter differently. The stakes of average coaching become real — they\'re missed opportunities to change someone\'s life.',points:['Impact extends beyond the gym — physical strength changes how people show up everywhere','The stakes of average coaching are real — missed opportunities to change someone\'s life','Purpose-driven coaching is the antidote to burnout — bigger than the job','FHC exists to create this kind of impact at both locations, every day'],apply:'Write down one member whose life you believe has genuinely changed through FHC. What specifically changed? What did you contribute as their coach?',quiz:{q:'What keeps coaches in the work for decades without burning out?',opts:['High compensation','Having a coaching purpose bigger than the individual session or paycheck','Working at a well-equipped facility','Having a flexible schedule'],ans:1}},
+  {id:33,p:'mindset',type:'video',title:'Alex Hormozi: how to not waste your life',level:'All levels',dur:'15 min',src:'Hormozi',vid:'VIq5AnUOiS0',text:'Hormozi addresses the gap between what you say your priorities are and how you actually spend your time. For coaches, this gap shows up constantly — the coach who says development matters but never does intentional reflection.\n\n<strong>FHC coaching lens:</strong> This isn\'t just about productivity. It\'s about the alignment between stated values and daily behavior — which is the most visible thing a coach models for their members. Members don\'t listen to what you say about discipline. They watch how you show up.',points:['The gap between stated priorities and actual time use is the most honest measure of your values','Alignment: do your daily habits match who you say you are as a coach?','What you model is what you teach — members watch before they listen','Intentional daily reflection closes the gap before it becomes permanent'],apply:'Track how you spend your time for one week — specifically hours outside coaching sessions. Does the allocation reflect the priorities of a developing coach?',quiz:{q:'What does Hormozi identify as the most honest measure of your actual priorities?',opts:['What you say your goals are','How you spend your time — not what you say your priorities are','The results you\'ve achieved','The mentors you follow'],ans:1}},
+  {id:34,p:'mindset',type:'article',title:'Coaching under pressure and stress',level:'Intermediate',dur:'6 min read',src:'FHC Original',vid:null,text:'Coaching under stress is a skill. The days when your personal life is complicated, when you\'re sleep-deprived, when there\'s tension in the gym — those days don\'t cancel the coaching schedule. Members show up. You have to be there.\n\n<strong>The discipline of presence:</strong> The moment you walk through the gym door, your story steps back and the member\'s experience steps forward. Not suppression — context management.\n\n<strong>The practice:</strong> A 2-minute transition ritual before every class. The ritual signals to your nervous system that you\'re shifting roles.',points:['Coaching under stress is a professional skill — trained, not hoped for','Your challenges step back when you\'re on the floor. The member\'s experience steps forward.','Transition rituals work: 2 minutes before class to shift from personal to professional presence','You model regulation for members — how you handle pressure shows what\'s possible'],apply:'Design your pre-class transition ritual. 2 minutes. Write it down. Use it for 3 weeks and note the difference in your presence quality.',quiz:{q:'What is the purpose of a pre-class transition ritual?',opts:['To physically warm up before class','To signal to your nervous system that you\'re shifting from personal to professional role','To help coaches review programming details','It\'s primarily for members who see the coach warming up'],ans:1}},
+  {id:35,p:'mindset',type:'article',title:'Avoiding burnout: the sustainable coaching career',level:'All levels',dur:'7 min read',src:'FHC Original',vid:null,text:'Coaching burnout is caused by hard work without recovery, without purpose, and without the feeling that any of it matters.\n\n<strong>The three burnout accelerators:</strong> Role diffusion — doing everything with no clear boundaries. Emotional labor without outlet — coaching is high-contact emotionally; it needs somewhere to go. Stagnation — coaches who stop learning stop caring. This portal exists to prevent that.\n\n<strong>The sustainable career:</strong> Clear role, genuine purpose, continuous growth, and recovery as a non-negotiable.',points:['Burnout = hard work without recovery + purpose + felt impact','Role diffusion: too many hats with no boundaries drains coaches fastest','Emotional labor needs discharge — mentorship, peer conversations, structured reflection','Stagnation = the fastest path to burnout. Active learning is non-negotiable.'],apply:'Rate yourself 1–10 on each of the three burnout accelerators: role clarity, emotional discharge practices, and active learning. Which is your biggest risk?',quiz:{q:'What is the fastest path to coaching burnout according to this framework?',opts:['Coaching too many classes per week','Stagnation — stopping growth while still doing the job','Too much emotional involvement with members','Coaching highly competitive athletes'],ans:1}},
+  {id:36,p:'mindset',type:'article',title:'Receiving feedback: the skill no one teaches coaches',level:'All levels',dur:'5 min read',src:'FHC Original',vid:null,text:'Coaches are trained to give feedback. Almost nobody trains them to receive it.\n\nThe coaches who improve fastest aren\'t the most talented — they\'re the ones who can take honest feedback, process it without defensiveness, and translate it into behavior change.\n\n<strong>Three failure modes:</strong> Deflection — immediately explaining why it doesn\'t apply. Over-acceptance — treating every piece as equally valid. Avoidance — steering away from situations where feedback might happen.',points:['Receiving feedback is a trainable skill — not a personality trait','Deflection and over-acceptance are both failure modes — aim for discerning receptivity','Ask for feedback intentionally and create psychological safety for honesty','Process privately before responding. Then decide. Don\'t react.'],apply:'Ask one peer coach and Hodge for one piece of specific feedback on your coaching this week. Write down what you hear before you respond.',quiz:{q:'What distinguishes a coach who receives feedback well from one who doesn\'t?',opts:['They agree with every piece of feedback','They process honest feedback without defensiveness and translate it into behavior change','They have more experience and less to learn','They prefer written over verbal feedback'],ans:1}},
+  {id:37,p:'business',type:'video',title:'Alex Hormozi: how to make offers people never churn from',level:'All levels',dur:'18 min',src:'Hormozi',vid:'0c21D8j5aqI',text:'Required viewing for every coach at FHC. Hormozi\'s framework on churn prevention cuts to why members leave — almost never the reason you think.\n\n<strong>The core argument:</strong> Churn is a product problem before a relationship problem. Members don\'t leave because they stopped liking you. They leave because the product stopped delivering visible, felt progress. When the outcome disappears from their awareness, the justification for the cost disappears.\n\n<strong>FHC application:</strong> You are the primary product. Your presence, coaching quality, and relationship is the core of what keeps people here.',points:['Churn is a product problem first — the outcome must remain visible and felt','Progress must be made attributable — members need to connect improvement to their membership','You are the primary product at FHC — coaching quality is the core retention driver','When progress disappears from a member\'s awareness, the justification for the cost disappears'],apply:'Identify 3 members who\'ve been attending 3+ months. Name one specific way each has improved. If you can\'t — that\'s the gap. Fix it before they find it themselves.',quiz:{q:'According to Hormozi, what is churn fundamentally caused by?',opts:['Poor customer service','A product problem — visible, felt progress is no longer being delivered','Price being too high','Members finding better nearby options'],ans:1}},
+  {id:38,p:'business',type:'video',title:'Two-Brain Business: the client journey and retention',level:'All levels',dur:'20 min',src:'Two-Brain Business',vid:'_TSfMYbS8bg',text:'Chris Cooper\'s client journey framework is one of the clearest explanations of why gyms lose members. Without structured onboarding, the average new member stays 78 days.\n\n<strong>The core insight:</strong> For the first 78 days, new members are constantly self-justifying. Every time they pay, they\'re asking "Is this worth it?" If you don\'t give them a clear answer — through visible progress, community, and coaching attention — they\'ll eventually answer it themselves.\n\n<strong>FHC application:</strong> New member → intake → 30-day check-in → 90-day goal review → community integration. Build it once. Run it always.',points:['Without structured onboarding, average member retention is just 78 days','Members in first 78 days are constantly self-justifying — coaches must provide visible answers','30-day check-in + 90-day goal review + community connection → 8+ month retention','Build the onboarding system once. Run it for every member. No exceptions.'],apply:'Map the exact onboarding steps a new member receives at your location right now. Identify the gaps. Propose one specific addition.',quiz:{q:'According to Two-Brain research, what is average member retention without structured onboarding?',opts:['6 months','12 months','78 days','3 months'],ans:2}},
+  {id:39,p:'business',type:'article',title:'The FHC retention playbook: five pillars that keep members',level:'All levels',dur:'9 min read',src:'FHC Original',vid:null,text:'Retention at FHC is built on five pillars — and every coach contributes to all five.\n\n<strong>Pillar 1 — Results:</strong> Members who are measurably improving stay. <strong>Pillar 2 — Relationships:</strong> Members with friends at the gym stay. You\'re the catalyst. <strong>Pillar 3 — Belonging:</strong> Members who feel part of something stay. <strong>Pillar 4 — Progress visibility:</strong> Results exist but must be pointed out explicitly. <strong>Pillar 5 — The coaching relationship:</strong> Members don\'t leave gyms. They leave or stay for their coaches.',points:['Five pillars: Results, Relationships, Belonging, Progress visibility, Coaching relationship','Members leave coaches, not gyms — your relationship is the highest-leverage retention variable','Progress visibility is different from results — results must be made salient to count','The Function Farm Challenge exists to build pillar 3: belonging through shared experience'],apply:'Score your current member base on all five pillars. Which is weakest? What specific action would you take in the next 30 days to strengthen it?',quiz:{q:'What is the highest-leverage retention variable a coach directly controls?',opts:['Programming quality and exercise variety','Equipment and facility quality','The quality of the coaching relationship with each member','Pricing and membership structure'],ans:2}},
+  {id:40,p:'business',type:'article',title:'Hormozi\'s value equation applied to coaching',level:'Intermediate',dur:'8 min read',src:'Hormozi — applied to coaching',vid:null,text:'Hormozi\'s value equation from $100M Offers applies directly to what coaches do: Value = (Dream Outcome × Perceived Likelihood) / (Time Delay × Effort & Sacrifice).\n\n<strong>Dream Outcome:</strong> Do you know your members\' real goal? Not "get fitter" — the specific one. The 50-year-old who wants to hike a glacier with their grandkids.\n\n<strong>Perceived Likelihood:</strong> Members need to believe it\'s possible for them specifically. Build evidence through early wins.\n\n<strong>Time Delay:</strong> Members quit when progress feels too slow. Visible wins in the first 30 days are retention.\n\n<strong>Effort & Sacrifice:</strong> You can\'t reduce the work. But you can make the experience feel worth it.',points:['The value equation: Dream Outcome × Likelihood / Time Delay × Sacrifice','Know each member\'s real goal — the specific one, not the generic one','Early wins in first 30 days lower perceived time delay and reduce dropout risk','You can\'t reduce the work — but you can make it feel worth it. That\'s your job.'],apply:'Pick 5 members. Write down what you believe their real goal is — the specific one. Is your coaching explicitly serving that goal? If you don\'t know, find out this week.',quiz:{q:'In Hormozi\'s value equation, what does \'perceived likelihood of achievement\' mean for a coach?',opts:['The coach\'s own belief in the program','The member\'s belief that the goal is possible for them specifically','How likely the coach is to retain the member','The probability of injury during training'],ans:1}},
+  {id:41,p:'business',type:'article',title:'Two-Brain metrics: what every coach should understand',level:'Intermediate',dur:'7 min read',src:'Two-Brain Business',vid:null,text:'Chris Cooper\'s Two-Brain framework has done more to bring business literacy to gym owners than anyone in the industry.\n\n<strong>Average Length of Engagement (ALE):</strong> How long does the average member stay? FHC target: 12+ months. Under 6 months means something is broken.\n\n<strong>Net Promoter Score:</strong> Would members recommend FHC? Driven almost entirely by coaching quality and community.\n\n<strong>Attendance rate:</strong> 2 consecutive missed weeks = elevated churn risk. Notice and reach out.\n\n<strong>New member 30-day attendance:</strong> 8+ visits in 30 days predicts 12-month retention better than any other metric.',points:['Average Length of Engagement (ALE): the most important single retention metric','NPS is driven by coaching quality and community — not equipment or location','2 consecutive missed weeks = elevated churn risk. Notice and act immediately.','8+ visits in first 30 days predicts long-term retention better than any other metric'],apply:'Ask Hodge or Caroline for the current ALE at your location. Is it trending up or down? What would you change based on what you now know?',quiz:{q:'What attendance pattern best predicts 12-month member retention?',opts:['Attending at least once per week on average','Attending 2+ times per week after 3 months','8 or more visits in the member\'s first 30 days','Attending every class in their first 2 weeks'],ans:2}},
+  {id:42,p:'business',type:'article',title:'Staff culture: what high-performing coaching teams do differently',level:'Intermediate',dur:'7 min read',src:'FHC Original',vid:null,text:'The best coaching teams don\'t happen by accident. They\'re built through deliberate culture, clear standards, and accountability from coaches invested in each other\'s growth.\n\n<strong>What high-performing teams share:</strong> Clear standards everyone knows and holds each other to — not rules, standards. Peer accountability that doesn\'t require management. Shared ownership of outcomes — the member experience belongs to every coach. Investment in each other\'s growth.',points:['Standards not just rules — everyone navigates by \'what great looks like\'','Peer accountability is the sign of a healthy team — issues addressed before they need management','Shared ownership: the member experience belongs to every coach on the floor','Investment in growth: debrief, observe each other, share what\'s working'],apply:'In your next team meeting: name one specific thing you\'ve seen a fellow coach do well recently. Be specific. Make it a habit.',quiz:{q:'What distinguishes a high-performing coaching team from an average one?',opts:['More experienced coaches with more certifications','Clear standards, peer accountability, and shared ownership of outcomes','Higher pay and better conditions','A strong head coach who catches all issues'],ans:1}},
+  {id:43,p:'business',type:'article',title:'Growing as a coach inside a gym: the development mindset',level:'All levels',dur:'6 min read',src:'FHC Original',vid:null,text:'Most coaches plateau. Not because they stop being capable, but because they stop being intentional about growth. The gym routine becomes the job routine, and the job routine doesn\'t include development.\n\n<strong>The FHC development framework:</strong> Skill-based learning (this portal). Observational learning — study great coaches with intention to extract principles. Reflective practice — one question after every session: what would I do differently? Mentorship — have someone in your corner who has seen more.\n\n<strong>The honest truth:</strong> The gap between a good coach and a great coach is not talent. It\'s intention.',points:['Deliberate development vs. passive exposure — the gap compounds over time','Reflective practice: one question after every session. 30 seconds. Non-negotiable.','Observational learning: study great coaches with intention to extract principles','The talent gap between good and great is smaller than the intention gap'],apply:'Establish one non-negotiable growth habit this week. Small and consistent beats ambitious and sporadic.',quiz:{q:'What is the primary difference between a good coach and a great one?',opts:['Talent and natural ability','Years of experience','Deliberate intention about getting better — not passive exposure','Quality of formal certifications'],ans:2}},
+  {id:44,p:'business',type:'article',title:'Referrals and word of mouth: how coaches drive gym growth',level:'All levels',dur:'6 min read',src:'Two-Brain / FHC',vid:null,text:'Two-Brain\'s research consistently shows that referrals are the highest-quality, lowest-cost growth channel for any gym. The primary driver is not marketing — it\'s coaching quality and the member relationship.\n\nWhen a member refers a friend, they\'re making a social bet: "I trust this place enough to put my name on it." That bet is made based on their coaching experience.\n\n<strong>The coach\'s role:</strong> Be worth talking about. Ask at the right moment — after milestones and PRs. Make referring easy.',points:['Referrals are the highest-quality, lowest-cost growth channel — coaches are the source','A member who refers has made a social bet on the quality of their coaching experience','Referral moment: after milestones, PRs, and goal achievements — not randomly','Be worth talking about. Do something today a member would want to share.'],apply:'Identify two members in a referral-ready moment right now — they\'ve achieved something meaningful recently. Have the referral conversation with both this week.',quiz:{q:'What is the primary driver of member referrals from a gym?',opts:['Competitive pricing','Quality of equipment','Coaching quality and the strength of the member relationship','Strong social media presence'],ans:2}},
+  {id:45,p:'business',type:'quiz',title:'Knowledge check: business and retention fundamentals',level:'All levels',dur:'5 min',src:'FHC',vid:null,text:'Test your understanding of the retention, business, and member experience frameworks covered in this pillar.',points:[],apply:null,quiz:{q:'A member has missed two consecutive weeks with no contact. Based on what you\'ve learned, what is the best immediate action?',opts:['Wait another week to avoid seeming pushy','Send a personal message or call — they\'re at elevated churn risk and deserve attention','Remove them from the schedule and let them reach out when ready','Ask another member if they know what\'s going on'],ans:1}}
+];
+
+const APPS_SCRIPT = `function doPost(e) {
+  try {
+    var data = JSON.parse(e.postData.contents);
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var coachName = data.coach || 'Unknown';
+    var sheet = ss.getSheetByName(coachName);
+    
+    if (!sheet) {
+      sheet = ss.insertSheet(coachName);
+      sheet.getRange(1, 1, 1, 6).setValues([
+        ['Timestamp','Lesson ID','Lesson Title','Pillar','Total Completed','Coach']
+      ]);
+      sheet.getRange(1, 1, 1, 6).setFontWeight('bold');
+      sheet.setFrozenRows(1);
+    }
+    
+    sheet.appendRow([
+      data.timestamp,
+      data.lessonId,
+      data.lessonTitle,
+      data.lessonPillar,
+      data.totalDone,
+      coachName
+    ]);
+    
+    // Update summary sheet
+    var summary = ss.getSheetByName('Summary');
+    if (!summary) {
+      summary = ss.insertSheet('Summary');
+      summary.getRange(1,1,1,3).setValues([['Coach','Completed','Last Active']]);
+      summary.getRange(1,1,1,3).setFontWeight('bold');
+    }
+    var summaryData = summary.getDataRange().getValues();
+    var found = false;
+    for (var i = 1; i < summaryData.length; i++) {
+      if (summaryData[i][0] === coachName) {
+        summary.getRange(i+1,2,1,2).setValues([[data.totalDone, data.timestamp]]);
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      summary.appendRow([coachName, data.totalDone, data.timestamp]);
+    }
+    
+    return ContentService.createTextOutput(JSON.stringify({status:'ok'}))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch(err) {
+    return ContentService.createTextOutput(JSON.stringify({status:'error',message:err.toString()}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}`;
+
+let currentCoach = null;
+let activePillar = 'all';
+let COACHES = [];
+
+function getCoaches() {
+  try { return JSON.parse(localStorage.getItem('fhc_coaches')) || DEFAULT_COACHES.map(n=>({name:n,done:[],quizAttempts:0,quizCorrect:0,lastActive:null})); }
+  catch(e) { return DEFAULT_COACHES.map(n=>({name:n,done:[],quizAttempts:0,quizCorrect:0,lastActive:null})); }
+}
+function saveCoaches(list) { localStorage.setItem('fhc_coaches',JSON.stringify(list)); }
+function getCoachData(name) { return COACHES.find(c=>c.name===name); }
+function updateCoachData(name,fn) {
+  const idx=COACHES.findIndex(c=>c.name===name);
+  if(idx>=0){ fn(COACHES[idx]); COACHES[idx].lastActive=new Date().toISOString().slice(0,10); saveCoaches(COACHES); }
+}
+
+function initLogin() {
+  COACHES=getCoaches();
+  const sel=document.getElementById('coach-select');
+  sel.innerHTML='<option value="">— choose coach —</option>';
+  COACHES.forEach(c=>{ const o=document.createElement('option');o.value=c.name;o.textContent=c.name;sel.appendChild(o); });
+  sel.onchange=()=>{ document.getElementById('login-btn').disabled=!sel.value; };
+}
+
+function loginCoach() {
+  const name=document.getElementById('coach-select').value;
+  if(!name) return;
+  currentCoach=name;
+  showScreen('portal');
+  renderPortal();
+}
+
+function openAdminModal(){ document.getElementById('admin-modal').classList.add('open');document.getElementById('admin-pw').value='';document.getElementById('admin-err').style.display='none'; }
+function closeAdminModal(){ document.getElementById('admin-modal').classList.remove('open'); }
+function checkAdminPw(){
+  if(document.getElementById('admin-pw').value===ADMIN_PASSWORD){ closeAdminModal();showScreen('admin');renderAdmin(); }
+  else{ document.getElementById('admin-err').style.display='block'; }
+}
+document.getElementById('admin-pw').addEventListener('keydown',e=>{ if(e.key==='Enter') checkAdminPw(); });
+function logout(){ currentCoach=null;showScreen('login');initLogin(); }
+function showScreen(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+}
+
+function renderPortal() {
+  document.getElementById('nav-coach-name').textContent=currentCoach;
+  const data=getCoachData(currentCoach);
+  const done=data?data.done:[];
+  document.getElementById('s-done').textContent=done.length;
+  const pct=Math.round(done.length/TOTAL*100);
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-pct').textContent=pct+'%';
+  if(data&&data.quizAttempts>0) document.getElementById('s-quiz').textContent=Math.round((data.quizCorrect/data.quizAttempts)*100)+'%';
+  const tabsEl=document.getElementById('pillar-tabs');
+  tabsEl.innerHTML=PILLARS.map(p=>{
+    const cnt=p.id==='all'?TOTAL:LESSONS.filter(l=>l.p===p.id).length;
+    const dc=p.id==='all'?done.length:LESSONS.filter(l=>l.p===p.id&&done.includes(l.id)).length;
+    return `<div class="ptab${activePillar===p.id?' active':''}" onclick="setPillar('${p.id}')"><i class="ti ${p.icon}"></i>${p.label}<span class="count">${dc}/${cnt}</span></div>`;
+  }).join('');
+  renderGrid();
+}
+
+function setPillar(p){ activePillar=p;document.getElementById('viewer').classList.remove('open');document.getElementById('viewer').innerHTML='';renderPortal(); }
+
+function renderGrid() {
+  const data=getCoachData(currentCoach);
+  const done=data?data.done:[];
+  const filtered=activePillar==='all'?LESSONS:LESSONS.filter(l=>l.p===activePillar);
+  document.getElementById('lesson-grid').innerHTML=filtered.map(l=>{
+    const t=TM[l.type];const isDone=done.includes(l.id);
+    return `<div class="lesson-card${isDone?' done':''}" onclick="openLesson(${l.id})">
+      <div class="lc-done-badge"><i class="ti ti-check"></i></div>
+      <span class="lc-type ${t.cls}"><i class="ti ${t.icon}"></i>${t.label}</span>
+      <div class="lc-title">${l.title}</div>
+      <div class="lc-meta">${l.dur}</div>
+      <div class="lc-level">${l.level}</div>
+      <div class="lc-src">${l.src}</div>
+    </div>`;
+  }).join('');
+}
+
+function openLesson(id) {
+  const l=LESSONS.find(x=>x.id===id);if(!l)return;
+  const data=getCoachData(currentCoach);const done=data?data.done:[];
+  const v=document.getElementById('viewer');
+  let html='';
+  if(l.vid) html+=`<div class="viewer-vid"><iframe src="https://www.youtube.com/embed/${l.vid}?rel=0" allowfullscreen loading="lazy"></iframe></div>`;
+  else if(l.type==='video') html+=`<div class="viewer-novid"><i class="ti ti-player-play"></i><p>${l.title}</p><span class="viewer-src-badge">${l.src}</span></div>`;
+  html+=`<div class="viewer-head"><div class="viewer-title">${l.title}</div><button class="viewer-close" onclick="closeViewer()"><i class="ti ti-x"></i> Close</button></div>`;
+  html+=`<div class="viewer-body"><span class="src-tag">${l.src}</span>`;
+  html+=`<div class="vtext">${(l.text||'').replace(/\n\n/g,'</div><div class="vtext">').replace(/\n/g,'<br>')}</div>`;
+  if(l.type==='quiz'&&l.quiz){
+    html+=buildQuiz(l);
+  } else {
+    if(l.points&&l.points.length) html+=`<div style="margin-bottom:14px"><div class="kp-head">Key takeaways</div>${l.points.map(p=>`<div class="kp"><i class="ti ti-check"></i><span>${p}</span></div>`).join('')}</div>`;
+    if(l.apply) html+=`<div class="apply-box"><div class="apply-box-head"><i class="ti ti-target" style="vertical-align:-2px;margin-right:4px"></i>Apply this week</div><p>${l.apply}</p></div>`;
+    if(l.quiz){ html+=`<hr class="v-divider"><div class="kp-head" style="margin-bottom:8px">Knowledge check</div>`+buildQuiz(l); }
+    const isDone=done.includes(l.id);
+    html+=`<div class="vactions">
+      <button class="btn-complete" onclick="markDone(${l.id})"${isDone?' style="opacity:0.6;cursor:default"':''}>
+        <i class="ti ti-${isDone?'circle-check':'check'}"></i>${isDone?'Completed':'Mark complete'}
+      </button>
+      <button class="btn-close-v" onclick="closeViewer()"><i class="ti ti-x"></i> Close</button>
+    </div>`;
+  }
+  html+=`</div>`;
+  v.innerHTML=html;v.classList.add('open');v.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function buildQuiz(l){
+  return `<div class="quiz-q">${l.quiz.q}</div>${l.quiz.opts.map((o,i)=>`<div class="qopt" id="qo-${l.id}-${i}" onclick="answerQuiz(${l.id},${i},${l.quiz.ans})">${o}</div>`).join('')}<div class="qres" id="qr-${l.id}"></div>`;
+}
+
+function closeViewer(){ document.getElementById('viewer').classList.remove('open');document.getElementById('viewer').innerHTML=''; }
+
+function markDone(id){
+  updateCoachData(currentCoach,c=>{ if(!c.done.includes(id)) c.done.push(id); });
+  syncToSheets(id);renderPortal();openLesson(id);
+}
+
+function answerQuiz(lessonId,chosen,ans){
+  document.querySelectorAll(`[id^="qo-${lessonId}-"]`).forEach((o,i)=>{
+    if(i===ans) o.classList.add('correct');
+    else if(i===chosen&&chosen!==ans) o.classList.add('wrong');
+    o.classList.add('off');
+  });
+  const r=document.getElementById('qr-'+lessonId);const correct=chosen===ans;
+  updateCoachData(currentCoach,c=>{ c.quizAttempts=(c.quizAttempts||0)+1;if(correct) c.quizCorrect=(c.quizCorrect||0)+1; });
+  if(correct){ r.className='qres show pass';r.innerHTML='<i class="ti ti-circle-check"></i> Correct.';markDone(lessonId); }
+  else{ r.className='qres show fail';r.innerHTML='<i class="ti ti-alert-circle"></i> Not quite — review the lesson content above.'; }
+}
+
+const SHEETS_URL='https://script.google.com/macros/s/AKfycbwPMTxFNkenCMDW1iYXp_D4onlSpbXJ_p-KVISjjq6t8XlDdSfskTe9MG_mHkOglqjP/exec';
+
+function syncToSheets(lessonId){
+  const url=localStorage.getItem('fhc_sheets_url')||SHEETS_URL;if(!url)return;
+  const l=LESSONS.find(x=>x.id===lessonId);const data=getCoachData(currentCoach);
+  fetch(url,{method:'POST',mode:'no-cors',body:JSON.stringify({coach:currentCoach,lessonId,lessonTitle:l?l.title:'',lessonPillar:l?l.p:'',totalDone:data?data.done.length:0,timestamp:new Date().toISOString()})}).catch(()=>{});
+}
+
+function renderAdmin(){
+  COACHES=getCoaches();
+  const total=COACHES.length;
+  const avgDone=total>0?Math.round(COACHES.reduce((a,c)=>a+(c.done||[]).length,0)/total):0;
+  const fullComplete=COACHES.filter(c=>(c.done||[]).length===TOTAL).length;
+  document.getElementById('admin-subtitle').textContent='— '+total+' coaches';
+  document.getElementById('admin-stats').innerHTML=`
+    <div class="admin-stat"><div class="admin-stat-label">Total coaches</div><div class="admin-stat-value">${total}</div></div>
+    <div class="admin-stat"><div class="admin-stat-label">Avg completed</div><div class="admin-stat-value">${avgDone}</div></div>
+    <div class="admin-stat"><div class="admin-stat-label">Fully complete</div><div class="admin-stat-value">${fullComplete}</div></div>
+    <div class="admin-stat"><div class="admin-stat-label">Total lessons</div><div class="admin-stat-value">${TOTAL}</div></div>`;
+  document.getElementById('coach-table').innerHTML=COACHES.map(c=>{
+    const done=(c.done||[]).length;const pct=Math.round(done/TOTAL*100);
+    const initials=c.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    return `<div class="coach-row" onclick="showDetail('${c.name}')">
+      <div class="coach-name"><div class="coach-avatar">${initials}</div>${c.name}</div>
+      <div class="coach-done">${done}<span style="font-weight:400;color:var(--text-3);font-size:12px"> / ${TOTAL}</span></div>
+      <div class="coach-prog-wrap"><div class="coach-prog-track"><div class="coach-prog-fill" style="width:${pct}%"></div></div><span class="coach-prog-pct">${pct}%</span></div>
+      <div class="coach-last">${c.lastActive||'Never'}</div>
+      <div class="coach-actions"><button class="btn-remove" onclick="event.stopPropagation();removeCoach('${c.name}')"><i class="ti ti-trash"></i></button></div>
+    </div>`;
+  }).join('');
+  const url=localStorage.getItem('fhc_sheets_url')||SHEETS_URL;
+  document.getElementById('sheets-url').value=url;
+  document.getElementById('sheets-status').textContent=url?'✓ Connected — syncing to Google Sheets':'Not connected';
+  document.getElementById('sheets-status').className='sheets-status'+(url?' connected':'');
+  document.getElementById('apps-script-code').textContent=APPS_SCRIPT;
+}
+
+function showDetail(name){
+  const data=COACHES.find(c=>c.name===name);const done=data?(data.done||[]):[];
+  document.getElementById('detail-name').textContent=name+'\'s progress';
+  document.getElementById('detail-lessons').innerHTML=LESSONS.map(l=>`
+    <div class="detail-lesson ${done.includes(l.id)?'done':'undone'}">
+      ${done.includes(l.id)?'<i class="ti ti-check" style="margin-right:4px"></i>':''}<strong style="font-size:12px">${l.title}</strong>
+      <div class="detail-lesson-src">${l.src}</div>
+    </div>`).join('');
+  document.getElementById('detail-panel').classList.add('open');
+  document.getElementById('detail-panel').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function closeDetail(){ document.getElementById('detail-panel').classList.remove('open'); }
+function openAddModal(){ document.getElementById('add-modal').classList.add('open');document.getElementById('new-coach-name').value=''; }
+function closeAddModal(){ document.getElementById('add-modal').classList.remove('open'); }
+function addCoach(){
+  const name=document.getElementById('new-coach-name').value.trim();if(!name)return;
+  if(COACHES.find(c=>c.name===name)){ alert('Coach already exists.');return; }
+  COACHES.push({name,done:[],quizAttempts:0,quizCorrect:0,lastActive:null});
+  saveCoaches(COACHES);closeAddModal();renderAdmin();
+}
+function removeCoach(name){
+  if(!confirm('Remove '+name+' from the portal? This will delete their progress data.'))return;
+  COACHES=COACHES.filter(c=>c.name!==name);saveCoaches(COACHES);renderAdmin();
+}
+function saveSheetUrl(){
+  const url=document.getElementById('sheets-url').value.trim()||SHEETS_URL;
+  localStorage.setItem('fhc_sheets_url',url);
+  document.getElementById('sheets-status').textContent='✓ Connected — syncing to Google Sheets';
+  document.getElementById('sheets-status').className='sheets-status connected';
+}
+
+initLogin();
+</script>
+</body>
+</html>
